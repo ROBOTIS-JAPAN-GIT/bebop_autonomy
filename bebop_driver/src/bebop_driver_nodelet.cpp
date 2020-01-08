@@ -96,6 +96,8 @@ void BebopDriverNodelet::onInit()
   param_camera_frame_id_ = private_nh.param<std::string>("camera_frame_id", "camera_optical");
   param_base_link_frame_id_ = private_nh.param<std::string>("base_link_frame_id", "base_link");
   param_odom_frame_id_ = private_nh.param<std::string>("odom_frame_id", "odom");
+  param_camera_pan_joint_id_ = private_nh.param<std::string>("camera_pan_joint_id", "camera_pan_joint");
+  param_camera_tilt_joint_id_ = private_nh.param<std::string>("camera_tilt_joint_id", "camera_tilt_joint");
   param_publish_odom_tf_ = private_nh.param<bool>("publish_odom_tf", true);
   param_cmd_vel_timeout_ = private_nh.param<double>("cmd_vel_timeout", 0.2);
 
@@ -525,8 +527,8 @@ void BebopDriverNodelet::AuxThread()
   // We do not publish JointState in a nodelet friendly way
   // These names should match the joint name defined by bebop_description
   sensor_msgs::JointState js_msg;
-  js_msg.name.push_back("camera_pan_joint");
-  js_msg.name.push_back("camera_tilt_joint");
+  js_msg.name.push_back(param_camera_pan_joint_id_);
+  js_msg.name.push_back(param_camera_tilt_joint_id_);
   js_msg.position.resize(2);
 
   sensor_msgs::NavSatFix gps_msg;

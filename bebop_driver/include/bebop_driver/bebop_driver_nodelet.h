@@ -142,6 +142,8 @@ private:
   std::string param_camera_frame_id_;
   std::string param_base_link_frame_id_;
   std::string param_odom_frame_id_;
+  std::string param_camera_pan_joint_id_;
+  std::string param_camera_tilt_joint_id_;
   bool param_publish_odom_tf_;
   double param_cmd_vel_timeout_;
 
