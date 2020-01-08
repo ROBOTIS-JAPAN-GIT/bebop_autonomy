@@ -24,6 +24,6 @@ states:
 
 reset_settings: true
 publish_odom_tf: true
-base_link_frame_id: "base_link"
-odom_frame_id: "odom"
+base_link_frame_id: "bebop2_1_base_link"
+odom_frame_id: "bebop2_1_odom"
 cmd_vel_timeout: 0.2
