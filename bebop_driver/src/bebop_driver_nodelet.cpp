@@ -94,7 +94,10 @@ void BebopDriverNodelet::onInit()
   const std::string& param_bebop_ip = private_nh.param<std::string>("bebop_ip", "192.168.42.1");
 
   param_camera_frame_id_ = private_nh.param<std::string>("camera_frame_id", "camera_optical");
+  param_base_link_frame_id_ = private_nh.param<std::string>("base_link_frame_id", "base_link");
   param_odom_frame_id_ = private_nh.param<std::string>("odom_frame_id", "odom");
+  param_camera_pan_joint_id_ = private_nh.param<std::string>("camera_pan_joint_id", "camera_pan_joint");
+  param_camera_tilt_joint_id_ = private_nh.param<std::string>("camera_tilt_joint_id", "camera_tilt_joint");
   param_publish_odom_tf_ = private_nh.param<bool>("publish_odom_tf", true);
   param_cmd_vel_timeout_ = private_nh.param<double>("cmd_vel_timeout", 0.2);
 
@@ -505,7 +508,7 @@ void BebopDriverNodelet::AuxThread()
   ros::Time last_odom_time(ros::Time::now());
   geometry_msgs::TransformStamped odom_to_base_tf;
   odom_to_base_tf.header.frame_id = param_odom_frame_id_;
-  odom_to_base_tf.child_frame_id = "base_link";
+  odom_to_base_tf.child_frame_id = param_base_link_frame_id_;
   tf2_ros::TransformBroadcaster tf_broad;
   tf2::Vector3 odom_to_base_trans_v3(0.0, 0.0, 0.0);
   tf2::Quaternion odom_to_base_rot_q;
@@ -524,8 +527,8 @@ void BebopDriverNodelet::AuxThread()
   // We do not publish JointState in a nodelet friendly way
   // These names should match the joint name defined by bebop_description
   sensor_msgs::JointState js_msg;
-  js_msg.name.push_back("camera_pan_joint");
-  js_msg.name.push_back("camera_tilt_joint");
+  js_msg.name.push_back(param_camera_pan_joint_id_);
+  js_msg.name.push_back(param_camera_tilt_joint_id_);
   js_msg.position.resize(2);
 
   sensor_msgs::NavSatFix gps_msg;
@@ -629,7 +632,7 @@ void BebopDriverNodelet::AuxThread()
         nav_msgs::OdometryPtr odom_msg_ptr(new nav_msgs::Odometry());
         odom_msg_ptr->header.stamp = stamp;
         odom_msg_ptr->header.frame_id = param_odom_frame_id_;
-        odom_msg_ptr->child_frame_id = "base_link";
+        odom_msg_ptr->child_frame_id = param_base_link_frame_id_;
         odom_msg_ptr->twist.twist.linear.x = beb_vx_m;
         odom_msg_ptr->twist.twist.linear.y = beb_vy_m;
         odom_msg_ptr->twist.twist.linear.z = beb_vz_m;
